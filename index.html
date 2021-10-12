@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>      <!-- jquery source -->
+    <title>Document</title>
+</head>
+<body style="background-color:#add8e6; flex: 1; display: grid; justify-content: center; padding-top: 100px">
+
+    <label for="account"><strong>Enter your sentences</strong>:</label>
+    <input type="text" id="sentences" size="80" oninput="onAddressChange()" value="great"><br><br>
+    <button class = "btn" onclick="get()">Get it !</button> 
+
+
+      
+    
+     <p><strong>Sentiment</strong>: <span id="label"></span></p>
+     <p><strong>Positivity</strong> : <span id="posscore"></span></p>
+     <p><strong>Negative</strong> <span id="negscore"></span></p><br>
+     
+     <p id='log'></p>
+
+    <script>
+
+    function get() {
+
+        var url = "https://cors-anywhere.herokuapp.com/http://text-processing.com/api/sentiment/";
+        // var url = "http://text-processing.com/api/sentiment/";
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url);
+
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+
+                //Return JSON format
+                var logger = document.getElementById('log');
+                logger.innerHTML = xhr.responseText;
+                console.log(xhr.responseText);
+
+                //Breakdown the JSON Format
+                const txt = xhr.responseText
+                const obj = JSON.parse(txt);
+                document.getElementById("label").innerHTML = obj.label;
+                document.getElementById("posscore").innerHTML = obj.probability.pos;
+                document.getElementById("negscore").innerHTML = obj.probability.neg;
+             
+        };
+           
+           
+
+            var data = "text=" + document.getElementById('sentences').value ;
+            console.log(data)
+
+        xhr.send(data);
+    }
+        
+    </script>
+
+
+
+</body>
+</html>
